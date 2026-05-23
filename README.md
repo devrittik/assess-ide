@@ -188,7 +188,7 @@ Local Setup
 --------------------
 
 ```
-git clone <repo-url>
+git clone https://github.com/devrittik/assess-ide/
 ```
 
 * * * * *
