@@ -54,15 +54,12 @@ Assess IDE allows users to create, edit, persist, and run frontend projects dire
 
 - Vite
 
-- TailwindCSS
-
 - Monaco Editor
 
 - Zustand
 
 - xterm.js
 
-- react-resizable-panels
 
 ## Backend
 
