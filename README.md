@@ -6,6 +6,20 @@ Assess IDE allows users to create, edit, persist, and run frontend projects dire
 
 ---
 
+## Live Demo
+
+🔗 https://assess-ide.vercel.app
+
+---
+[Watch Demo Video](https://drive.google.com/file/d/1thacs-vrQ6sfzDQLeMi-sw8FCmmmXMXp/view?usp=sharing)
+---
+
+## Screenshot
+
+![Assess IDE Banner](./screenshots/banner.png)
+
+---
+
 # Features
 
 ## Core Features
@@ -73,11 +87,8 @@ Assess IDE allows users to create, edit, persist, and run frontend projects dire
 React UI
 
   ├── Monaco Editor
-
   ├── File Explorer
-
   ├── Preview Panel
-
   └── Terminal
 
         ↓
@@ -308,13 +319,6 @@ Assignment Goals Covered
 -   Persistent projects
 -   Responsive IDE layout
 -   Browser-native runtime
-
-* * * * *
-
-Screenshots
-===========
-
-
 
 * * * * *
 
