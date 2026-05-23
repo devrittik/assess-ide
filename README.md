@@ -264,7 +264,8 @@ Important Deployment Notes
 WebContainers require the following headers:
 
 ```
-Cross-Origin-Opener-Policy: same-originCross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
 ```
 
 These headers are configured for both development and production environments.
