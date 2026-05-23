@@ -1,0 +1,21 @@
+{
+  "name": "assess-ide-server",
+  "version": "1.0.0",
+  "description": "Express + MongoDB backend for the browser Assess IDE",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.1",
+    "assess-ide": "file:.."
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
