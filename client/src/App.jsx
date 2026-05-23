@@ -6,7 +6,7 @@ import MainPanel from './components/MainPanel';
 import BottomPanel from './components/BottomPanel';
 import { useFileStore } from './store/useFileStore';
 import { useTerminalStore } from './store/useTerminalStore';
-import { getInstance, mountTree } from './services/webcontainer';
+import { getInstance, mountTree, watchPackageFiles } from './services/webcontainer';
 import { loadProject, saveProject } from './services/projectApi';
 import { createReactTemplate } from './templates/reactTemplate';
 import { debounce } from './utils/debounce';
@@ -16,6 +16,8 @@ const STORAGE_KEY = 'assess-ide.projectId';
 export default function App() {
   const setProject = useFileStore((s) => s.setProject);
   const setFiles = useFileStore((s) => s.setFiles);
+  const syncRuntimeFile = useFileStore((s) => s.syncRuntimeFile);
+  const removeRuntimeFile = useFileStore((s) => s.removeRuntimeFile);
   const files = useFileStore((s) => s.files);
   const projectId = useFileStore((s) => s.projectId);
   const dirty = useFileStore((s) => s.dirty);
@@ -86,6 +88,13 @@ export default function App() {
 
         setBootStatus('Mounting files…');
         await mountTree(initialFiles);
+        await watchPackageFiles(async (path, content) => {
+          if (typeof content === 'string') {
+            syncRuntimeFile(path, content);
+            return;
+          }
+          removeRuntimeFile(path);
+        });
 
         saveProject(id, initialFiles, projectName);
         setReady(true);
@@ -95,7 +104,7 @@ export default function App() {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [syncRuntimeFile, removeRuntimeFile]);
 
   const autosaveRef = useRef(null);
   useEffect(() => {

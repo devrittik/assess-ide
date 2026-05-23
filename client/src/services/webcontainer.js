@@ -5,6 +5,7 @@ let instance = null;
 let bootPromise = null;
 let serverReadyListeners = new Set();
 let serverInfo = { url: null, port: null };
+let packageSyncStop = null;
 
 export async function getInstance() {
   if (instance) return instance;
@@ -38,6 +39,45 @@ export function getServerInfo() {
 export async function mountTree(tree) {
   const wc = await getInstance();
   await wc.mount(convertToWebContainerFs(tree));
+}
+
+export async function watchPackageFiles(onSync) {
+  const wc = await getInstance();
+  packageSyncStop?.();
+
+  let timer = null;
+  const syncPaths = ['package.json', 'package-lock.json'];
+
+  const syncFile = async (path) => {
+    try {
+      const content = await wc.fs.readFile(path, 'utf8');
+      await onSync(path, content);
+    } catch (_) {
+      await onSync(path, null);
+    }
+  };
+
+  const syncAll = async () => {
+    await Promise.all(syncPaths.map(syncFile));
+  };
+
+  const watcher = wc.fs.watch('.', (_event, filename) => {
+    const name = typeof filename === 'string' ? filename : new TextDecoder().decode(filename);
+    if (!syncPaths.includes(name)) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      syncFile(name);
+    }, 100);
+  });
+
+  await syncAll();
+
+  packageSyncStop = () => {
+    clearTimeout(timer);
+    watcher.close();
+  };
+
+  return packageSyncStop;
 }
 
 export async function runCommand(cmd, args = [], { onData, env } = {}) {

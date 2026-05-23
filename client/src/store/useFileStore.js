@@ -29,6 +29,21 @@ export const useFileStore = create((set, get) => ({
     set({ files: files || {}, dirty: get().dirty + 1 });
   },
 
+  syncRuntimeFile(path, content) {
+    const files = structuredClone(get().files);
+    setNodeAtPath(files, path, { type: 'file', content: content ?? '' });
+    set({ files, dirty: get().dirty + 1 });
+  },
+
+  removeRuntimeFile(path) {
+    const files = structuredClone(get().files);
+    if (!deleteNodeAtPath(files, path)) return false;
+    const openTabs = get().openTabs.filter((t) => t !== path);
+    const activeFile = get().activeFile === path ? (openTabs[openTabs.length - 1] || null) : get().activeFile;
+    set({ files, activeFile, openTabs, dirty: get().dirty + 1 });
+    return true;
+  },
+
   setActiveFile(path) {
     const openTabs = get().openTabs;
     if (!openTabs.includes(path)) {

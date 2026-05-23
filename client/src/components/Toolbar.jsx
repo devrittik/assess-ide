@@ -28,7 +28,6 @@ export default function Toolbar() {
     setRunning(true);
     setStatus('installing', 'Installing dependencies…');
     try {
-      await mountTree(files);
       await installAndStart({
         onData: (chunk) => {
           if (write) write(chunk);
